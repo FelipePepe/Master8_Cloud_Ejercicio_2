@@ -12,6 +12,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Use SSH key
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/id_rsa
+          sudo chmod u+rw ~/.ssh/id_rsa
+
+      - name: Git config
+        run: |
+          git config --global user.email "felipe-cd@my-app.com"
+          git config --global user.name "felipe-cd"
+
       - name: Install
         run: npm install
 
@@ -19,4 +30,4 @@ jobs:
         run: npm run build
 
       - name: Deploy gh-pages
-        run: npm run deploy
+        run: npm run deploy -- -r git@github.com:FelipePepe/Master8_Cloud_Ejercicio_2.git
